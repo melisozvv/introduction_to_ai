@@ -1,0 +1,18 @@
+
+# Durum gösterimi 
+
+def print_state(state):
+    """
+    Durumu güzel bir şekilde yazdıran fonksiyon
+
+    Args:
+        state: [çubuk1, çubuk2, çubuk3] formatında durum
+    """
+    print("Çubuk 1:", state[0] if state[0] else "[]")
+    print("Çubuk 2:", state[1] if state[1] else "[]")
+    print("Çubuk 3:", state[2] if state[2] else "[]")
+    print()
+
+# Test edin - Fonksiyonunuzu burada test edin
+test_state = [[1, 3, 5], [2], [4]]
+print_state(test_state)
