@@ -16,3 +16,112 @@ def print_state(state):
 # Test edin - Fonksiyonunuzu burada test edin
 test_state = [[1, 3, 5], [2], [4]]
 print_state(test_state)
+
+
+
+
+# Geçerli Hamle Kontrolü
+
+def is_valid_move(disk, target_peg):
+    """
+    Bir diskin hedef çubuğa konmasının geçerli olup olmadığını kontrol eder
+
+    Args:
+        disk: Taşınacak disk numarası (int)
+        target_peg: Hedef çubuk (list)
+
+    Returns:
+        bool: Hamle geçerliyse True, değilse False
+    """
+    # Hedef çubuk boşsa, her disk konabilir
+    if not target_peg:
+        return True
+
+    # Hedef çubuğun en üstündeki diskten küçükse konabilir
+    # (küçük sayı = küçük disk)
+    return disk < target_peg[0]
+print("Test 1:", is_valid_move(2, [1, 3]))
+print("Test 2:", is_valid_move(1, [2, 3]))
+print("Test 3:", is_valid_move(5, []))
+
+
+# Tek Adımda Ulaşılabilir Durumları Hesaplama
+
+def get_possible_moves(state):
+    """
+    Verilen durumdan tek hamlede ulaşılabilir tüm durumları hesaplar
+    """
+    possible_states = []
+
+    # Her çubuk için kontrol et (kaynak çubuk)
+    for i in range(3):
+        # Çubuk boş değilse
+        if state[i]:
+            # En üstteki diski al (liste başı)
+            top_disk = state[i][0]
+
+            # Diğer iki çubuğa koymayı dene
+            for j in range(3):
+                if i != j:
+                    # Hamle geçerli mi kontrol et
+                    if is_valid_move(top_disk, state[j]):
+                        # Yeni durumu oluştur
+                        new_state = [peg[:] for peg in state]
+
+                        # Diski taşı
+                        new_state[i].pop(0)
+                        new_state[j].insert(0, top_disk)
+
+                        possible_states.append(new_state)
+
+    return possible_states
+
+
+test_state = [[1, 3, 5], [2], [4]]
+moves = get_possible_moves(test_state)
+
+print("Başlangıç durumu:")
+print_state(test_state)
+print(f"\nBulunan hamle sayısı: {len(moves)}")
+for i, move in enumerate(moves):
+    print(f"Hamle {i+1}: {move}")
+
+
+
+
+
+# Test Durumlarını Çalıştırma
+
+# Test durumları
+test_cases = [
+    [[1, 3, 5], [2], [4]],        # Örnek verilen
+    [[3, 5], [1, 2], [4]],
+    [[3, 5], [2], [1, 4]],
+    [[1, 3, 5], [], [2, 4]],
+    [[], [1, 2, 3], [4]],
+    [[2, 3], [], [1]],
+    [[3, 4, 5], [1], [2]]
+]
+
+print("=" * 70)
+print("HANOİ KULELERİ - TEST SONUÇLARI")
+print("=" * 70)
+
+for test_num, initial_state in enumerate(test_cases, 1):
+    print(f"TEST {test_num}:")
+    print("Başlangıç durumu:", initial_state)
+    print_state(initial_state)
+
+    # Olası hamleleri hesapla
+    possible_moves = get_possible_moves(initial_state)
+
+    print(f"Ulaşılabilir hamle sayısı: {len(possible_moves)}")
+
+    if possible_moves:
+        print("Ulaşılan durumlar:")
+        for i, move in enumerate(possible_moves, 1):
+            print(f"  {i}. {move}")
+    else:
+        print("Hiç hamle mümkün değil!")
+
+    print("-" * 50)
